@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ne">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17365d">
+<title>सानो घर ठूलो सपना — Workshop Manager</title>
+<style>
+:root{--navy:#17365d;--blue:#eaf2f8;--bg:#f3f6fa;--green:#198754;--red:#c62828;--amber:#9a6700}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:#182230}
+header{background:var(--navy);color:white;padding:18px 16px}header h1{font-size:19px;margin:0 0 5px}header p{font-size:12px;margin:0;opacity:.9}
+nav{display:flex;overflow:auto;gap:6px;padding:10px;background:white;position:sticky;top:0;z-index:2;box-shadow:0 2px 8px #0001}
+nav button{white-space:nowrap;border:0;background:#e7edf4;border-radius:9px;padding:10px 12px;font-weight:650;color:#17365d}
+nav button.active{background:var(--navy);color:white}
+main{max-width:1000px;margin:auto;padding:12px}.panel{display:none}.panel.active{display:block}
+.card{background:white;border-radius:14px;padding:15px;margin-bottom:12px;box-shadow:0 2px 8px #102a4310}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:14px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.metric{background:var(--blue);border-radius:12px;padding:12px}.metric b{display:block;font-size:20px;margin-top:4px}
+label{display:block;font-size:13px;font-weight:650;margin:9px 0 4px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;background:white;font:inherit;font-size:14px}textarea{min-height:65px}
+button.primary,button.secondary,button.danger{border:0;border-radius:9px;padding:11px 13px;font-weight:700;margin-top:10px}
+.primary{background:var(--navy);color:white}.secondary{background:#e5edf5;color:var(--navy)}.danger{background:#fde8e7;color:var(--red)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.note{font-size:12px;color:#526174;line-height:1.5}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}th,td{text-align:left;padding:8px;border-bottom:1px solid #e2e8f0;vertical-align:top}th{background:#edf2f7}
+.scroll{overflow:auto}.sat{background:#fce8e6!important;color:#b42318}.pill{display:inline-block;border-radius:20px;padding:3px 8px;background:#e7edf4;font-size:11px}
+.actions{display:flex;gap:7px;flex-wrap:wrap}.status{font-weight:700}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}}
+</style>
+</head>
+<body>
+<header><h1>छिन्ताङ ग्रिल तथा आल्मुनियम वर्क-सप, धरान–५</h1><p>सानो घर ठूलो सपना · Personal Workshop Manager · Offline</p></header>
+<nav id="nav">
+<button class="active" data-tab="home">Dashboard</button><button data-tab="sites">Site / Customer</button><button data-tab="attendance">हाजिरी</button><button data-tab="salary">तलब / Advance</button><button data-tab="money">Income / Expense</button><button data-tab="reports">Report</button><button data-tab="backup">Backup</button>
+</nav>
+<main>
+<section id="home" class="panel active">
+<div class="card"><h2>आजको हिसाब</h2><div class="grid">
+<div class="metric">चलिरहेका Site<b id="mRunning">0</b></div><div class="metric">कुल ग्राहक/Site<b id="mSites">0</b></div><div class="metric">आम्दानी<b id="mIncome">रु. 0</b></div><div class="metric">खर्च<b id="mExpense">रु. 0</b></div></div></div>
+<div class="card"><h3>छिटो Entry</h3><div class="actions"><button class="primary" onclick="tab('sites')">+ नयाँ Site</button><button class="primary" onclick="tab('attendance')">+ हाजिरी</button><button class="primary" onclick="tab('money')">+ आम्दानी/खर्च</button><button class="secondary" onclick="tab('backup')">Backup लिनुहोस्</button></div><p class="note">डाटा यस मोबाइल/ब्राउजरमै राखिन्छ। नियमित Backup निकालेर सुरक्षित ठाउँमा राख्नुहोस्।</p></div>
+</section>
+<section id="sites" class="panel"><div class="card"><h2>Site & Customer List</h2><form id="siteForm"><div class="formgrid">
+<label>Entry Date (English)<input id="sDate" type="date" required></label><label>Customer Name<input id="sCustomer" required></label>
+<label>Phone<input id="sPhone" inputmode="tel"></label><label>Location / Site<input id="sLocation" required></label>
+<label>Work Type<input id="sWork" placeholder="जस्तै: Grill, Railing, Truss"></label><label>Contract Amount (रु.)<input id="sAmount" type="number" min="0" step="0.01"></label>
+<label>Status<select id="sStatus"><option>Not Confirm</option><option>Confirm</option><option>Running</option><option>Complete</option><option>Cancel</option></select></label><label>Follow-up Date<input id="sFollow" type="date"></label>
+<label>Notes<textarea id="sNotes"></textarea></label></div><button class="primary">Save Site</button></form></div><div class="card"><h3>Saved Sites</h3><input id="siteSearch" placeholder="नाम / Location खोज्नुहोस्"><div class="scroll"><table><thead><tr><th>Customer / Site</th><th>काम / रकम</th><th>Status</th><th>Follow-up</th><th></th></tr></thead><tbody id="siteRows"></tbody></table></div></div></section>
+<section id="attendance" class="panel"><div class="card"><h2>Labour Attendance</h2><form id="attForm"><div class="formgrid">
+<label>नेपाली मिति (BS)<input id="aBs" placeholder="2083-06-28" required></label><label>English Date<input id="aDate" type="date" required></label>
+<label>बार (नेपाली)<input id="aDay" readonly placeholder="मिति राखेपछि आउँछ"></label><label>कामदारको नाम<input id="aWorker" required></label>
+<label>हाजिरी<select id="aStatus"><option>Present</option><option>Half Day</option><option>Absent</option><option>Leave</option></select></label><label>दैनिक ज्याला (रु.)<input id="aRate" type="number" min="0" step=".01" required></label>
+<label>Site / काम<input id="aSite"></label><label>टिप्पणी<input id="aNote"></label></div><p class="note">English Date छान्दा नेपाली बार स्वतः देखिन्छ। BS मिति तपाईंले लेख्नुहोस्। शनिबारको रेकर्ड रातो देखिन्छ।</p><button class="primary">Save Attendance</button></form></div><div class="card"><h3>हाजिरी रेकर्ड</h3><div class="scroll"><table><thead><tr><th>BS मिति</th><th>English Date / बार</th><th>कामदार</th><th>हाजिरी</th><th>कमाइ</th><th></th></tr></thead><tbody id="attRows"></tbody></table></div></div></section>
+<section id="salary" class="panel"><div class="card"><h2>Salary / Advance / Payment</h2><form id="payForm"><div class="formgrid">
+<label>मिति (English)<input id="pDate" type="date" required></label><label>कामदारको नाम<input id="pWorker" required></label>
+<label>महिना (BS: YYYY-MM)<input id="pMonth" placeholder="2083-06" required></label><label>Payment Type<select id="pType"><option>Advance</option><option>Salary</option><option>Other</option></select></label>
+<label>रकम (रु.)<input id="pAmount" type="number" min="0.01" step=".01" required></label><label>टिप्पणी<input id="pNote"></label></div><button class="primary">Save Payment</button></form></div><div class="card"><h3>महिनाको तलब सारांश</h3><div class="row"><label>कामदार<input id="sumWorker" placeholder="कामदारको नाम"></label><label>BS महिना<input id="sumMonth" placeholder="2083-06"></label></div><button class="secondary" onclick="salarySummary()">हिसाब निकाल्नुहोस्</button><div id="salaryResult" class="note"></div><div class="scroll"><table><thead><tr><th>मिति</th><th>कामदार</th><th>महिना</th><th>प्रकार</th><th>रकम</th></tr></thead><tbody id="payRows"></tbody></table></div></div></section>
+<section id="money" class="panel"><div class="card"><h2>Income / Expense</h2><form id="moneyForm"><div class="formgrid">
+<label>मिति<input id="mDate" type="date" required></label><label>प्रकार<select id="mType"><option>Income</option><option>Expense</option></select></label>
+<label>Customer / Party<input id="mParty"></label><label>Site / Job<input id="mSite"></label>
+<label>Category<input id="mCategory" placeholder="कामको रकम, मजदुरी, यातायात..."></label><label>रकम (रु.)<input id="mAmount2" type="number" min="0.01" step=".01" required></label>
+<label>Payment Method<select id="mMethod"><option>Cash</option><option>Bank</option><option>eSewa/Khalti</option><option>Other</option></select></label><label>Notes<input id="mNotes"></label></div><button class="primary">Save Entry</button></form></div><div class="card"><h3>आम्दानी/खर्च रेकर्ड</h3><div class="scroll"><table><thead><tr><th>Date</th><th>प्रकार</th><th>Party / Site</th><th>Category</th><th>रकम</th><th></th></tr></thead><tbody id="moneyRows"></tbody></table></div></div></section>
+<section id="reports" class="panel"><div class="card"><h2>Reports</h2><div class="row"><label>From Date<input id="rFrom" type="date"></label><label>To Date<input id="rTo" type="date"></label></div><button class="primary" onclick="makeReport()">Report देखाउनुहोस्</button><div id="reportResult"></div><p class="note">मिति छानेर Weekly, Monthly वा Semi-Annual अवधि हेर्न सक्नुहुन्छ।</p></div></section>
+<section id="backup" class="panel"><div class="card"><h2>Backup & Restore</h2><p>Backup JSON फाइलमा sites, attendance, payments र income/expense सबै सुरक्षित हुन्छन्। फाइल Google Drive, SD card वा अन्य सुरक्षित ठाउँमा राख्न सक्नुहुन्छ।</p><button class="primary" onclick="backup()">⬇ Backup डाउनलोड गर्नुहोस्</button><label>Restore गर्न Backup फाइल छान्नुहोस्<input id="restoreFile" type="file" accept=".json,application/json"></label><button class="danger" onclick="clearAll()">सबै डाटा मेटाउनुहोस्</button><p class="note">Restore गर्दा अहिलेको डाटा Backup फाइलको डाटाले प्रतिस्थापन हुन्छ। पहिले हालको Backup लिनुहोस्। डाटा browser storage मा हुन्छ; browser data clear गरेमा डाटा हराउन सक्छ।</p></div></section>
+</main>
+<script>
+const KEY='chhintang_workshop_personal_v1';
+let db=load();
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{sites:[],attendance:[],payments:[],money:[]}}catch(e){return {sites:[],attendance:[],payments:[],money:[]}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n){return 'रु. '+(Number(n)||0).toLocaleString('en-IN',{maximumFractionDigits:2})}
+function tab(id){document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+function today(){return new Date().toISOString().slice(0,10)}
+['sDate','aDate','pDate','mDate'].forEach(id=>document.getElementById(id).value=today());
+function nepaliDay(dateStr){if(!dateStr)return '';let d=new Date(dateStr+'T12:00:00');return ['आइतबार','सोमबार','मंगलबार','बुधबार','बिहीबार','शुक्रबार','शनिबार'][d.getDay()]}
+document.getElementById('aDate').addEventListener('change',()=>{document.getElementById('aDay').value=nepaliDay(document.getElementById('aDate').value);document.getElementById('aDay').classList.toggle('sat',dowsat())});
+function dowsat(){return nepaliDay(document.getElementById('aDate').value)==='शनिबार'}
+document.getElementById('siteForm').onsubmit=e=>{e.preventDefault();db.sites.push({id:Date.now(),date:sDate.value,customer:sCustomer.value,phone:sPhone.value,location:sLocation.value,work:sWork.value,amount:+sAmount.value||0,status:sStatus.value,follow:sFollow.value,notes:sNotes.value});e.target.reset();sDate.value=today();save()};
+document.getElementById('attForm').onsubmit=e=>{e.preventDefault();db.attendance.push({id:Date.now(),bs:aBs.value,date:aDate.value,day:nepaliDay(aDate.value),worker:aWorker.value,status:aStatus.value,rate:+aRate.value||0,site:aSite.value,note:aNote.value,earn:aStatus.value==='Present'?(+aRate.value||0):aStatus.value==='Half Day'?(+aRate.value||0)/2:0});e.target.reset();aDate.value=today();aDay.value='';save()};
+document.getElementById('payForm').onsubmit=e=>{e.preventDefault();db.payments.push({id:Date.now(),date:pDate.value,worker:pWorker.value,month:pMonth.value,type:pType.value,amount:+pAmount.value,note:pNote.value});e.target.reset();pDate.value=today();save()};
+document.getElementById('moneyForm').onsubmit=e=>{e.preventDefault();db.money.push({id:Date.now(),date:mDate.value,type:mType.value,party:mParty.value,site:mSite.value,category:mCategory.value,amount:+mAmount2.value,method:mMethod.value,notes:mNotes.value});e.target.reset();mDate.value=today();save()};
+function del(kind,id){if(confirm('यो Entry मेटाउने?')){db[kind]=db[kind].filter(x=>x.id!==id);save()}}
+function render(){
+mRunning.textContent=db.sites.filter(x=>x.status==='Running').length;mSites.textContent=db.sites.length;
+mIncome.textContent=money(db.money.filter(x=>x.type==='Income').reduce((a,x)=>a+x.amount,0));mExpense.textContent=money(db.money.filter(x=>x.type==='Expense').reduce((a,x)=>a+x.amount,0));
+const q=(siteSearch?.value||'').toLowerCase();
+siteRows.innerHTML=db.sites.filter(x=>(x.customer+' '+x.location).toLowerCase().includes(q)).slice().reverse().map(x=>`<tr><td><b>${esc(x.customer)}</b><br>${esc(x.phone)}<br>${esc(x.location)}</td><td>${esc(x.work)}<br>${money(x.amount)}</td><td><span class="pill">${esc(x.status)}</span></td><td>${esc(x.follow||'—')}</td><td><button class="danger" onclick="del('sites',${x.id})">Delete</button></td></tr>`).join('');
+attRows.innerHTML=db.attendance.slice().reverse().map(x=>`<tr class="${x.day==='शनिबार'?'sat':''}"><td>${esc(x.bs)}</td><td>${esc(x.date)}<br>${esc(x.day)}</td><td>${esc(x.worker)}</td><td>${esc(x.status)}</td><td>${money(x.earn)}</td><td><button class="danger" onclick="del('attendance',${x.id})">Delete</button></td></tr>`).join('');
+payRows.innerHTML=db.payments.slice().reverse().map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.worker)}</td><td>${esc(x.month)}</td><td>${esc(x.type)}</td><td>${money(x.amount)}<br><button class="danger" onclick="del('payments',${x.id})">Delete</button></td></tr>`).join('');
+moneyRows.innerHTML=db.money.slice().reverse().map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.type)}</td><td>${esc(x.party)}<br>${esc(x.site)}</td><td>${esc(x.category)}</td><td>${money(x.amount)}<br><button class="danger" onclick="del('money',${x.id})">Delete</button></td></tr>`).join('');
+}
+siteSearch.addEventListener('input',render);
+function salarySummary(){let w=sumWorker.value.trim(),m=sumMonth.value.trim();let days=db.attendance.filter(x=>x.worker===w&&x.bs.startsWith(m));let earned=days.reduce((s,x)=>s+x.earn,0);let paid=db.payments.filter(x=>x.worker===w&&x.month===m).reduce((s,x)=>s+x.amount,0);salaryResult.innerHTML=`<p>कामदार: <b>${esc(w)}</b> · महिना: <b>${esc(m)}</b></p><p>हाजिरी: ${days.filter(x=>x.status==='Present').length} पूरा दिन, ${days.filter(x=>x.status==='Half Day').length} आधा दिन</p><p>हाजिरीअनुसार कमाइ: <b>${money(earned)}</b></p><p>Advance + Salary payment: <b>${money(paid)}</b></p><p>बाँकी तलब: <b>${money(earned-paid)}</b></p>`}
+function makeReport(){let from=rFrom.value,to=rTo.value;if(!from||!to||from>to){reportResult.innerHTML='कृपया सही From र To Date छान्नुहोस्।';return}let rows=db.money.filter(x=>x.date>=from&&x.date<=to),inc=rows.filter(x=>x.type==='Income').reduce((a,x)=>a+x.amount,0),exp=rows.filter(x=>x.type==='Expense').reduce((a,x)=>a+x.amount,0);reportResult.innerHTML=`<div class="grid"><div class="metric">Income<b>${money(inc)}</b></div><div class="metric">Expense<b>${money(exp)}</b></div><div class="metric">Difference<b>${money(inc-exp)}</b></div><div class="metric">Entries<b>${rows.length}</b></div></div>`}
+function backup(){let json=JSON.stringify({app:'Chhintang Workshop Manager',version:1,exportedAt:new Date().toISOString(),data:db},null,2),filename='Chhintang_Workshop_Backup_'+today()+'.json';if(window.Android&&Android.saveBackup){Android.saveBackup(json,filename);return}let blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url)}
+restoreFile.addEventListener('change',async e=>{let f=e.target.files[0];if(!f)return;try{let j=JSON.parse(await f.text());let d=j.data||j;if(!d.sites||!d.attendance||!d.payments||!d.money)throw Error('Invalid');if(!confirm('Backup restore गर्दा हालको डाटा बदलिन्छ। जारी राख्ने?'))return;db=d;save();alert('Backup Restore भयो।')}catch(err){alert('Backup file सही छैन।')}e.target.value=''});
+function clearAll(){if(confirm('साँच्चै सबै डाटा मेटाउने? पहिले Backup लिनुहोस्।')){db={sites:[],attendance:[],payments:[],money:[]};save()}}
+render();
+</script>
+</body></html>
