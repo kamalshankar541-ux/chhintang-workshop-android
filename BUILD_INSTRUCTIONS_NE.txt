@@ -1,0 +1,19 @@
+छिन्ताङ वर्कसप Android APK — मोबाइलबाट Cloud Build गर्ने Project
+
+यो ZIP source project हो, तयार APK होइन। यसमा GitHub Actions workflow थपिएको छ जसले GitHub को cloud runner मा APK build गर्ने प्रयास गर्छ।
+
+मोबाइलबाट build गर्ने चरण:
+1. GitHub.com मा आफ्नो account खोल्नुहोस्/बनाउनुहोस्।
+2. + > New repository छान्नुहोस्। नाम: chhintang-workshop-android राख्नुहोस्। Private छान्न सक्नुहुन्छ।
+3. ZIP डाउनलोड गरेर Android प्रोजेक्ट extract गर्नुहोस्। GitHub वेबसाइटको upload files सुविधाबाट ZIP भित्रका सबै project files/folders upload गर्नुपर्छ। ZIP फाइललाई मात्रै repository मा राख्दा build हुँदैन। Root मा settings.gradle, build.gradle, app/ र .github/ देखिनुपर्छ।
+4. Files upload गर्दा commit changes गर्नुहोस्।
+5. Repository को Actions tab खोल्नुहोस्। “Build Chhintang Workshop APK” workflow छान्नुहोस् र Run workflow थिच्नुहोस्।
+6. हरियो success भए workflow run खोल्नुहोस्, तल Artifacts मा “Chhintang-Workshop-debug-APK” डाउनलोड गर्नुहोस्। ZIP extract गर्दा app-debug.apk भेटिन्छ।
+7. APK मोबाइलमा install गर्नुहोस्। Android ले मागेमा आफ्नो डाउनलोड गरेको APK का लागि मात्र “Install unknown apps” अनुमति दिनुहोस्।
+
+Build fail भए Actions log-ийн लाल error message screenshot/पाठ पठाउनुहोस्; त्यसअनुसार सच्याउनुपर्छ।
+
+महत्त्वपूर्ण:
+- GitHub account र इन्टरनेट चाहिन्छ। Cloud build runner को निःशुल्क सीमा/नीति परिवर्तन हुन सक्छ।
+- APK build success भए पनि वास्तविक मोबाइलमा सुविधाहरू जाँच्नुपर्छ। यो debug APK हो, Play Store का लागि signed release APK होइन।
+- App data फोनमै रहन्छ; फोन हराए/डाटा मेटिएमा Backup export गरेर छुट्टै सुरक्षित राख्नुहोस्।
